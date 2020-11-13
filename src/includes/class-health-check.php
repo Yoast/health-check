@@ -61,7 +61,7 @@ class Health_Check {
 		add_action( 'init', array( $this, 'start_troubleshoot_mode' ) );
 		add_action( 'load-plugins.php', array( $this, 'start_troubleshoot_single_plugin_mode' ) );
 
-		add_action( 'wp_ajax_health-check-log-errors', array( 'Health_Check_JS_Error_Logger', 'log_error' ) );
+		add_action( 'wp_ajax_health-check-log-errors', array( 'Health_Check_Error_Logger', 'log_error' ) );
 		add_action( 'wp_ajax_health-check-loopback-no-plugins', array( 'Health_Check_Loopback', 'loopback_no_plugins' ) );
 		add_action( 'wp_ajax_health-check-loopback-individual-plugins', array( 'Health_Check_Loopback', 'loopback_test_individual_plugins' ) );
 		add_action( 'wp_ajax_health-check-loopback-default-theme', array( 'Health_Check_Loopback', 'loopback_test_default_theme' ) );
@@ -232,6 +232,17 @@ class Health_Check {
 	public function enqueues() {
 		$screen = get_current_screen();
 	    $screen = get_current_screen();
+
+	    if ( is_admin() ) {
+	        $error_logger_js_variables = array(
+	            'screen' => $screen->id,
+                'nonce' => wp_create_nonce( 'health-check-error-logger' ),
+                'logURL' => admin_url() . 'tools.php?page=health-check&tab=debug',
+            );
+
+            wp_enqueue_script( 'health-check-error-logger' );
+            wp_localize_script( 'health-check-error-logger', 'SiteHealthErrorLogger', $error_logger_js_variables );
+        }
 
 		// Don't enqueue anything unless we're on the health check page.
 		if ( ( ! isset( $_GET['page'] ) || 'health-check' !== $_GET['page'] ) && 'dashboard' !== $screen->base ) {

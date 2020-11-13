@@ -60,6 +60,7 @@ require_once( dirname( __FILE__ ) . '/includes/class-health-check.php' );
 require_once( dirname( __FILE__ ) . '/includes/class-health-check-auto-updates.php' );
 require_once( dirname( __FILE__ ) . '/includes/class-health-check-wp-cron.php' );
 require_once( dirname( __FILE__ ) . '/includes/class-health-check-debug-data.php' );
+require_once( dirname( __FILE__ ) . '/includes/class-health-check-error-logger.php' );
 require_once( dirname( __FILE__ ) . '/includes/class-health-check-loopback.php' );
 require_once( dirname( __FILE__ ) . '/includes/class-health-check-troubleshoot.php' );
 require_once( dirname( __FILE__ ) . '/includes/class-health-check-site-status.php' );
