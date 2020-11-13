@@ -116,9 +116,15 @@ module.exports = function( grunt ) {
 		concat: {
 			healthcheck: {
 				src: [
-					'assets/javascript/**/*.js'
+					'assets/javascript/health-check/**/*.js'
 				],
 				dest: 'build/assets/javascript/health-check.js'
+			},
+			errorlogger: {
+				src: [
+					'assets/javascript/error-logger/**/*.js'
+				],
+				dest: 'build/assets/javascript/error-logger.js'
 			}
 		},
 		stylelint: {
