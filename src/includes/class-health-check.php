@@ -55,11 +55,13 @@ class Health_Check {
 
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 
+		add_action( 'admin_init', array( $this, 'register_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueues' ) );
 
 		add_action( 'init', array( $this, 'start_troubleshoot_mode' ) );
 		add_action( 'load-plugins.php', array( $this, 'start_troubleshoot_single_plugin_mode' ) );
 
+		add_action( 'wp_ajax_health-check-log-errors', array( 'Health_Check_JS_Error_Logger', 'log_error' ) );
 		add_action( 'wp_ajax_health-check-loopback-no-plugins', array( 'Health_Check_Loopback', 'loopback_no_plugins' ) );
 		add_action( 'wp_ajax_health-check-loopback-individual-plugins', array( 'Health_Check_Loopback', 'loopback_test_individual_plugins' ) );
 		add_action( 'wp_ajax_health-check-loopback-default-theme', array( 'Health_Check_Loopback', 'loopback_test_default_theme' ) );
@@ -69,6 +71,20 @@ class Health_Check {
 
 		add_filter( 'user_has_cap', array( $this, 'maybe_grant_site_health_caps' ), 1, 4 );
 	}
+
+    /**
+     * Registers the site health scripts and makes sure the error logger is loaded as early as possible.
+     *
+     * @since 1.4.5
+     *
+     * @return void
+     */
+    public function register_scripts() {
+        wp_register_script( 'health-check-error-logger', trailingslashit( HEALTH_CHECK_PLUGIN_URL ) . 'assets/javascript/error-logger.js', array(), HEALTH_CHECK_PLUGIN_VERSION, false );
+        wp_register_script( 'health-check', trailingslashit( HEALTH_CHECK_PLUGIN_URL ) . 'assets/javascript/health-check.js', array( 'jquery', 'wp-a11y', 'clipboard', 'wp-util' ), HEALTH_CHECK_PLUGIN_VERSION, true );
+
+        array_unshift( wp_scripts()->queue, 'health-check-error-logger' );
+    }
 
 	/**
 	 * Filters the user capabilities to grant the 'view_site_health_checks' capabilities as necessary.
@@ -215,6 +231,7 @@ class Health_Check {
 	 */
 	public function enqueues() {
 		$screen = get_current_screen();
+	    $screen = get_current_screen();
 
 		// Don't enqueue anything unless we're on the health check page.
 		if ( ( ! isset( $_GET['page'] ) || 'health-check' !== $_GET['page'] ) && 'dashboard' !== $screen->base ) {
@@ -338,7 +355,7 @@ class Health_Check {
 
 		wp_enqueue_style( 'health-check', trailingslashit( HEALTH_CHECK_PLUGIN_URL ) . 'assets/css/health-check.css', array(), HEALTH_CHECK_PLUGIN_VERSION );
 
-		wp_enqueue_script( 'health-check', trailingslashit( HEALTH_CHECK_PLUGIN_URL ) . 'assets/javascript/health-check.js', array( 'jquery', 'wp-a11y', 'clipboard', 'wp-util' ), HEALTH_CHECK_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'health-check' );
 
 		wp_localize_script( 'health-check', 'SiteHealth', $health_check_js_variables );
 	}
