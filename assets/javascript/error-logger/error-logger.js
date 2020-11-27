@@ -30,6 +30,8 @@
 
 	let errorMessage = '';
 
+	const previousOnError = window.onerror;
+
 	/**
 	 * Callback function for the onerror event. Logs errors to the server.
 	 *
@@ -51,6 +53,7 @@
 				line: '',
 				column: '',
 				screen: window.SiteHealthErrorLogger.screen,
+				timestamp: Date.now(),
 			};
 		} else {
 			error = {
@@ -59,6 +62,7 @@
 				line: lineNo,
 				column: columnNo,
 				screen: window.SiteHealthErrorLogger.screen,
+				timestamp: Date.now(),
 			};
 		}
 
@@ -66,6 +70,10 @@
 		if ( errorMessage !== msg ) {
 			errorMessage = msg;
 			postError( error );
+		}
+
+		if ( typeof previousOnError === 'function' ) {
+			return previousOnError( msg, url, lineNo, columnNo, err );
 		}
 
 		return false;
