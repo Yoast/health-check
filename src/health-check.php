@@ -72,6 +72,7 @@ require_once( dirname( __FILE__ ) . '/includes/tools/class-health-check-tool.php
 require_once( dirname( __FILE__ ) . '/includes/tools/class-health-check-files-integrity.php' );
 require_once( dirname( __FILE__ ) . '/includes/tools/class-health-check-mail-check.php' );
 require_once( dirname( __FILE__ ) . '/includes/tools/class-health-check-plugin-compatibility.php' );
+require_once( dirname( __FILE__ ) . '/includes/tools/class-health-check-error-log.php' );
 
 // Initialize our plugin.
 new Health_Check();

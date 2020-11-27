@@ -49,3 +49,8 @@
 
 	margin-bottom: 15px;
 }
+table#health-check-errors {
+	th.health-check-error-message, th.health-check-error-url, td.health-check-error-message, td.health-check-error-url {
+		width: 35%;
+	}
+}

@@ -14,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Health_Check_Error_Logger
  */
 class Health_Check_Error_Logger {
+    /**
+     * Logs JS error to an option.
+     */
     static function log_error() {
         check_ajax_referer( 'health-check-error-logger' );
 
